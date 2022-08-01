@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
+import Loading from './Loading';
 
 const MIN_LENGTH_NUMBER = 3;
 
@@ -8,32 +10,39 @@ class Login extends Component {
     super();
 
     this.state = {
-      buttonDisable: true,
+      isDisable: true,
       loginName: '',
+      isLoading: false,
     };
   }
 
   handleChange = ({ target }) => {
     if (target.value.length >= MIN_LENGTH_NUMBER) {
       this.setState({
-        buttonDisable: false,
+        isDisable: false,
         loginName: target.value,
       });
     } else {
       this.setState({
-        buttonDisable: true,
+        isDisable: true,
         loginName: target.value,
       });
     }
   }
 
-  handleClick = () => {
-    const { loginName } = this.state;
-    createUser({ name: loginName });
+  handleClick = async () => {
+    this.setState({
+      isLoading: true,
+    }, async () => {
+      const { loginName } = this.state;
+      const { history } = this.props;
+      await createUser({ name: loginName });
+      history.push('/search');
+    });
   }
 
   render() {
-    const { buttonDisable } = this.state;
+    const { isDisable, isLoading } = this.state;
     return (
       <div data-testid="page-login">
         <input
@@ -46,14 +55,19 @@ class Login extends Component {
         <button
           type="submit"
           data-testid="login-submit-button"
-          disabled={ buttonDisable }
+          disabled={ isDisable }
           onClick={ this.handleClick }
         >
           Entrar
         </button>
+        { isLoading && <Loading /> }
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.objectOf(PropTypes.string).isRequired,
+};
 
 export default Login;
