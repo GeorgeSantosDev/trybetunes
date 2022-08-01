@@ -4,7 +4,7 @@ class Login extends Component {
   render() {
     return (
       <div data-testid="page-login">
-        <p>teste</p>
+        <input type="text" name="login" id="login" data-testid="login-name-input" />
       </div>
     );
   }
