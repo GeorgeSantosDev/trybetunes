@@ -13,10 +13,10 @@ class Header extends Component {
   }
 
   async componentDidMount() {
-    const object = await getUser();
+    const { name } = await getUser();
 
     this.setState({
-      userName: object.name,
+      userName: name,
     }, () => {
       this.setState({
         isLoading: false,
@@ -28,7 +28,7 @@ class Header extends Component {
     const { isLoading, userName } = this.state;
     return (
       <header data-testid="header-component">
-        { isLoading ? <Loading /> : <p>{ userName }</p> }
+        { isLoading ? <Loading /> : <p data-testid="header-user-name">{ userName }</p> }
       </header>
     );
   }
