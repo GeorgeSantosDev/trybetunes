@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Loading from './Loading';
@@ -82,6 +83,10 @@ class Search extends Component {
             <p>{ album.collectionName }</p>
             <p>Álbum</p>
             <p>{ album.trackCount }</p>
+            <Link
+              data-testid={ `link-to-album-${album.collectionId}` }
+              to={ `/album/${album.collectionId}` }
+            />
           </div>
         )) : <p>Nenhum álbum foi encontrado</p>}
       </div>
