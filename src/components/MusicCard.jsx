@@ -12,6 +12,13 @@ class MusicCard extends Component {
           O seu navegador não suporta o elemento
           <code>audio</code>
         </audio>
+        <label
+          htmlFor={ musicInfos.trackId }
+          data-testid={ `checkbox-music-${musicInfos.trackId}` }
+        >
+          Favorita
+          <input type="checkbox" name="" id={ musicInfos.trackId } />
+        </label>
       </div>
     );
   }
