@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
+import MusicCard from '../components/MusicCard';
 
 class Album extends Component {
   constructor() {
@@ -38,6 +39,15 @@ class Album extends Component {
         {
           requestHasFinished
           && <p data-testid="album-name">{ requisition[0].collectionName }</p>
+        }
+        {
+          requestHasFinished
+          && requisition.map((album, i) => {
+            if (i === 0) {
+              return;
+            }
+            return <MusicCard musicInfos={ album } key={ album.trackId } />;
+          })
         }
       </div>
     );
