@@ -86,7 +86,9 @@ class Search extends Component {
             <Link
               data-testid={ `link-to-album-${album.collectionId}` }
               to={ `/album/${album.collectionId}` }
-            />
+            >
+              to
+            </Link>
           </div>
         )) : <p>Nenhum álbum foi encontrado</p>}
       </div>
