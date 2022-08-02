@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
+import Loading from './Loading';
 
 const MIN_CHAR_NUMBER = 2;
 
@@ -11,12 +12,15 @@ class Search extends Component {
     this.state = {
       isDisable: true,
       researched: '',
+      isLoading: false,
+      research: '',
+      fetchHasFinished: false,
     };
   }
 
   handleChange = ({ target }) => {
     this.setState({
-      researched: target.value,
+      research: target.value,
     }, () => {
       if (target.value.length >= MIN_CHAR_NUMBER) {
         this.setState({
@@ -26,17 +30,43 @@ class Search extends Component {
     });
   };
 
-  handleClick = async () => {
-    const { researched } = this.state;
-    await searchAlbumsAPI(researched);
-
-    this.setState({
-      researched: '',
+  handleClick = () => {
+    const { research } = this.state;
+    this.setState(({
+      researched: research,
+      research: '',
+    }), async () => {
+      const { researched } = this.state;
+      const album = await searchAlbumsAPI(researched);
+      this.setState({
+        fetchHasFinished: true,
+      });
     });
   }
+  // this.setState({
+  //   isLoading: true,
+  // }, async () => {
+  //   const { researched } = this.state;
+  //   const albums = await searchAlbumsAPI(researched);
+  //   this.setState(({
+  //     isLoading: false,
+  //     research: albums,
+  //     fetchHasFinished: true,
+  //   }));
+  // });
+
+  // this.setState({
+  //   researched: '',
+  // });
 
   render() {
-    const { isDisable, researched } = this.state;
+    const { isDisable,
+      researched,
+      isLoading,
+      fetchHasFinished,
+      research } = this.state;
+    const returnOfResarch = `Resultado de álbuns de: ${researched}`;
+
     return (
       <div data-testid="page-search">
         <Header />
@@ -45,7 +75,7 @@ class Search extends Component {
           name="artist"
           id="arttist"
           data-testid="search-artist-input"
-          value={ researched }
+          value={ research }
           onChange={ this.handleChange }
         />
         <button
@@ -56,6 +86,8 @@ class Search extends Component {
         >
           Pesquisar
         </button>
+        {isLoading && <Loading />}
+        {fetchHasFinished && <p>{ returnOfResarch }</p>}
       </div>
     );
   }
