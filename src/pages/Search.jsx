@@ -12,9 +12,10 @@ class Search extends Component {
     this.state = {
       isDisable: true,
       researched: '',
-      isLoading: false,
       research: '',
+      isLoading: false,
       fetchHasFinished: false,
+      albums: [],
     };
   }
 
@@ -40,31 +41,18 @@ class Search extends Component {
       const album = await searchAlbumsAPI(researched);
       this.setState({
         fetchHasFinished: true,
+        albums: album,
       });
     });
   }
-  // this.setState({
-  //   isLoading: true,
-  // }, async () => {
-  //   const { researched } = this.state;
-  //   const albums = await searchAlbumsAPI(researched);
-  //   this.setState(({
-  //     isLoading: false,
-  //     research: albums,
-  //     fetchHasFinished: true,
-  //   }));
-  // });
-
-  // this.setState({
-  //   researched: '',
-  // });
 
   render() {
     const { isDisable,
       researched,
       isLoading,
       fetchHasFinished,
-      research } = this.state;
+      research,
+      albums } = this.state;
     const returnOfResarch = `Resultado de álbuns de: ${researched}`;
 
     return (
@@ -88,6 +76,14 @@ class Search extends Component {
         </button>
         {isLoading && <Loading />}
         {fetchHasFinished && <p>{ returnOfResarch }</p>}
+        { fetchHasFinished && albums.length > 0 ? albums.map((album) => (
+          <div key={ album.artistId }>
+            <img src={ album.artworkUrl100 } alt={ album.collectionName } />
+            <p>{ album.collectionName }</p>
+            <p>Álbum</p>
+            <p>{ album.trackCount }</p>
+          </div>
+        )) : <p>Nenhum álbum foi encontrado</p>}
       </div>
     );
   }
