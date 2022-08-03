@@ -42,9 +42,10 @@ class Album extends Component {
       this.setState({ loading: true });
       await addSong(obj);
       this.setState({
-        loading: false,
         favoritesSong: [...favoritesSong, obj.trackId],
       });
+      await getFavoriteSongs();
+      this.setState({ loading: false })
     } else {
       this.setState({
         favoritesSong: favoritesSong.filter((id) => id !== obj.trackId),
