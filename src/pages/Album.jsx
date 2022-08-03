@@ -23,7 +23,7 @@ class Album extends Component {
     this.setState({ loading: true });
     const musicInfo = await getMusics(id);
     const musicsSaved = await getFavoriteSongs();
-    console.log(musicsSaved);
+
     this.setState({ loading: false });
 
     this.setState({
@@ -45,7 +45,7 @@ class Album extends Component {
         favoritesSong: [...favoritesSong, obj.trackId],
       });
       await getFavoriteSongs();
-      this.setState({ loading: false })
+      this.setState({ loading: false });
     } else {
       this.setState({
         favoritesSong: favoritesSong.filter((id) => id !== obj.trackId),
@@ -74,6 +74,7 @@ class Album extends Component {
             if (i === 0) {
               return;
             }
+            console.log(favoritesSong.some((id) => album.trackId === id));
             return (<MusicCard
               musicInfos={ album }
               key={ album.trackNumber }
@@ -88,7 +89,11 @@ class Album extends Component {
 }
 
 Album.propTypes = {
-  match: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default Album;
