@@ -23,7 +23,6 @@ class Album extends Component {
     this.setState({ loading: true });
     const musicInfo = await getMusics(id);
     const musicsSaved = await getFavoriteSongs();
-
     this.setState({ loading: false });
 
     this.setState({
@@ -74,7 +73,6 @@ class Album extends Component {
             if (i === 0) {
               return;
             }
-            console.log(favoritesSong.some((id) => album.trackId === id));
             return (<MusicCard
               musicInfos={ album }
               key={ album.trackNumber }
