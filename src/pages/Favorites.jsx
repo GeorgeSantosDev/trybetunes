@@ -37,6 +37,7 @@ class Favorites extends Component {
       await addSong(obj);
       this.setState({
         favoritesSong: [...favoritesSong, obj.trackId],
+        albums: await getFavoriteSongs(),
       });
       this.setState({ loading: false });
     } else {
@@ -44,6 +45,7 @@ class Favorites extends Component {
       await removeSong(obj);
       this.setState({
         favoritesSong: favoritesSong.filter((id) => id !== obj.trackId),
+        albums: await getFavoriteSongs(),
       });
       this.setState({ loading: false });
     }
