@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class Album extends Component {
@@ -56,22 +56,26 @@ fetchFavoriteSongs = () => {
       this.setState({
         favoritesSong: [...favoritesSong, obj.trackId],
       });
-      await getFavoriteSongs();
       this.setState({ loading: false });
     } else {
+      this.setState({ loading: true });
+      await removeSong(obj);
       this.setState({
         favoritesSong: favoritesSong.filter((id) => id !== obj.trackId),
       });
+      this.setState({ loading: false });
     }
   };
 
   render() {
     const { requisition, requestHasFinished, favoritesSong, loading } = this.state;
-    if (loading) return <Loading />;
 
     return (
       <div data-testid="page-album">
         <Header />
+        {
+          loading && <Loading />
+        }
         {
           requestHasFinished
           && <p data-testid="artist-name">{ requisition[0].artistName }</p>
@@ -82,17 +86,12 @@ fetchFavoriteSongs = () => {
         }
         {
           requestHasFinished
-          && requisition.map((album, i) => {
-            if (i === 0) {
-              return;
-            }
-            return (<MusicCard
-              musicInfos={ album }
-              key={ album.trackNumber }
-              change={ this.addingFavorites }
-              check={ favoritesSong.some((id) => album.trackId === id) }
-            />);
-          })
+          && requisition.filter((_, i) => i !== 0).map((album) => (<MusicCard
+            musicInfos={ album }
+            key={ album.trackNumber }
+            change={ this.addingFavorites }
+            check={ favoritesSong.some((id) => album.trackId === id) }
+          />))
         }
       </div>
     );
