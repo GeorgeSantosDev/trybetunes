@@ -20,11 +20,15 @@ class Album extends Component {
 
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
+    this.setState({ loading: true });
     const musicInfo = await getMusics(id);
-    getFavoriteSongs();
+    const musicsSaved = await getFavoriteSongs();
+    console.log(musicsSaved);
+    this.setState({ loading: false });
 
     this.setState({
       requisition: musicInfo,
+      favoritesSong: musicsSaved.map((obj) => obj.trackId),
     }, () => {
       this.setState({
         requestHasFinished: true,
