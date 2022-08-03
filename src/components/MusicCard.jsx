@@ -24,7 +24,7 @@ class MusicCard extends Component {
             name="favoriteMusic"
             id={ musicInfos.trackId }
             onChange={ () => change(musicInfos) }
-            checked={ check.some((id) => id === musicInfos.trackId) }
+            checked={ check }
           />
         </label>
       </div>
