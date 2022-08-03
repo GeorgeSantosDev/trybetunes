@@ -18,22 +18,35 @@ class Album extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { match: { params: { id } } } = this.props;
-    this.setState({ loading: true });
-    const musicInfo = await getMusics(id);
-    const musicsSaved = await getFavoriteSongs();
-    this.setState({ loading: false });
+    this.fetchAlbums(id);
+    this.fetchFavoriteSongs();
+  }
 
+fetchAlbums = (id) => {
+  this.setState({ loading: true }, async () => {
+    const musicInfo = await getMusics(id);
     this.setState({
+      loading: false,
       requisition: musicInfo,
-      favoritesSong: musicsSaved.map((obj) => obj.trackId),
     }, () => {
       this.setState({
         requestHasFinished: true,
       });
     });
-  }
+  });
+}
+
+fetchFavoriteSongs = () => {
+  this.setState({ loading: true }, async () => {
+    const songsFavorited = await getFavoriteSongs();
+    this.setState({
+      favoritesSong: songsFavorited.map((obj) => obj.trackId),
+      loading: false,
+    });
+  });
+}
 
   addingFavorites = async (obj) => {
     const { favoritesSong } = this.state;
