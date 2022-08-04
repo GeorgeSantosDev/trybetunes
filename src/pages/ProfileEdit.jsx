@@ -10,11 +10,38 @@ class ProfileEdit extends Component {
     this.state = {
       loading: '',
       userInfos: '',
+      isDisable: true,
+      name: '',
+      email: '',
+      description: '',
+      image: '',
     };
   }
 
   componentDidMount() {
     this.fetchUserInfos();
+  }
+
+  handleChange = ({ target }) => {
+    const { image, name, description, email } = this.state;
+    this.setState({
+      [target.name]: target.value,
+    }, () => {
+      this.setState({
+        userInfos: {
+          name,
+          email,
+          image,
+          description,
+        },
+      });
+      if (image.length > 0 && name.length > 0 && email.length > 0
+        && description.length > 0) {
+        this.setState({
+          isDisable: false,
+        });
+      }
+    });
   }
 
   fetchUserInfos = () => {
@@ -28,7 +55,7 @@ class ProfileEdit extends Component {
   }
 
   render() {
-    const { loading, userInfos } = this.state;
+    const { loading, userInfos, isDisable } = this.state;
     const { name, email, description, image } = userInfos;
     return (
       <div data-testid="page-profile-edit">
@@ -41,6 +68,7 @@ class ProfileEdit extends Component {
             id="userName"
             data-testid="edit-input-name"
             value={ name }
+            onChange={ this.handleChange }
           />
           <input
             type="email"
@@ -48,6 +76,7 @@ class ProfileEdit extends Component {
             id="userEmail"
             data-testid="edit-input-email"
             value={ email }
+            onChange={ this.handleChange }
           />
           <textarea
             name="description"
@@ -56,6 +85,7 @@ class ProfileEdit extends Component {
             rows="10"
             data-testid="edit-input-description"
             value={ description }
+            onChange={ this.handleChange }
           />
           <input
             type="text"
@@ -63,8 +93,15 @@ class ProfileEdit extends Component {
             id="userImage"
             data-testid="edit-input-image"
             value={ image }
+            onChange={ this.handleChange }
           />
-          <button type="submit" data-testid="edit-button-save">Salvar</button>
+          <button
+            type="submit"
+            data-testid="edit-button-save"
+            disabled={ isDisable }
+          >
+            Salvar
+          </button>
         </form>
       </div>
     );
