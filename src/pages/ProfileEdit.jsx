@@ -18,8 +18,9 @@ class ProfileEdit extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.fetchUserInfos();
+    // this.giveInfos();
   }
 
   handleChange = ({ target }) => {
@@ -50,13 +51,32 @@ class ProfileEdit extends Component {
       this.setState(({
         loading: false,
         userInfos: getInfos,
-      }));
+      }), () => {
+        const { userInfos } = this.state;
+        const { name, email, description, image } = userInfos;
+        this.setState({
+          name,
+          email,
+          image,
+          description,
+        });
+      });
     });
   }
 
+  // giveInfos = () => {
+  //   const { userInfos } = this.state;
+  //   const { name, email, description, image } = userInfos;
+  //   this.setState({
+  //     name,
+  //     email,
+  //     image,
+  //     description,
+  //   });
+  // }
+
   render() {
-    const { loading, userInfos, isDisable } = this.state;
-    const { name, email, description, image } = userInfos;
+    const { loading, isDisable, name, email, description, image } = this.state;
     return (
       <div data-testid="page-profile-edit">
         <Header />
