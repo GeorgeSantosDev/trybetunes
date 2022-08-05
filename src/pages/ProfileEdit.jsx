@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../components/Header';
-import { getUser } from '../services/userAPI';
+import { getUser, updateUser } from '../services/userAPI';
 import Loading from './Loading';
 
 class ProfileEdit extends Component {
@@ -18,9 +18,8 @@ class ProfileEdit extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.fetchUserInfos();
-    // this.giveInfos();
   }
 
   handleChange = ({ target }) => {
@@ -64,16 +63,13 @@ class ProfileEdit extends Component {
     });
   }
 
-  // giveInfos = () => {
-  //   const { userInfos } = this.state;
-  //   const { name, email, description, image } = userInfos;
-  //   this.setState({
-  //     name,
-  //     email,
-  //     image,
-  //     description,
-  //   });
-  // }
+  handleClick = () => {
+    const { userInfos } = this.state;
+    this.setState({ loading: true }, async () => {
+      await updateUser(userInfos);
+      this.setState({ loading: false });
+    });
+  }
 
   render() {
     const { loading, isDisable, name, email, description, image } = this.state;
@@ -119,6 +115,7 @@ class ProfileEdit extends Component {
             type="submit"
             data-testid="edit-button-save"
             disabled={ isDisable }
+            onClick={ this.handleClick }
           >
             Salvar
           </button>
