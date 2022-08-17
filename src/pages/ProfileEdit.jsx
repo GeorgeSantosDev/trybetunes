@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import propTypes from 'prop-types';
 import Header from '../components/Header';
 import { getUser, updateUser } from '../services/userAPI';
 import Loading from './Loading';
@@ -23,25 +24,24 @@ class ProfileEdit extends Component {
   }
 
   handleChange = ({ target }) => {
-    const { image, name, description, email } = this.state;
+    const { userInfos } = this.state;
     this.setState({
       [target.name]: target.value,
+      userInfos: { ...userInfos, [target.name]: target.value },
     }, () => {
-      this.setState({
-        userInfos: {
-          name,
-          email,
-          image,
-          description,
-        },
-      });
-      if (image.length > 0 && name.length > 0 && email.length > 0
-        && description.length > 0) {
-        this.setState({
-          isDisable: false,
-        });
-      }
+      this.enablingButton();
     });
+  }
+
+  enablingButton = () => {
+    const { image, name, description, email } = this.state;
+
+    if (image.length > 0 && name.length > 0 && email.length > 0
+      && description.length > 0) {
+      this.setState({
+        isDisable: false,
+      });
+    }
   }
 
   fetchUserInfos = () => {
@@ -58,16 +58,20 @@ class ProfileEdit extends Component {
           email,
           image,
           description,
+        }, () => {
+          this.enablingButton();
         });
       });
     });
   }
 
-  handleClick = () => {
+  handleClick = (event) => {
+    event.preventDefault();
     const { userInfos } = this.state;
     this.setState({ loading: true }, async () => {
       await updateUser(userInfos);
-      this.setState({ loading: false });
+      const { history } = this.props;
+      history.push('/profile');
     });
   }
 
@@ -124,5 +128,11 @@ class ProfileEdit extends Component {
     );
   }
 }
+
+ProfileEdit.propTypes = {
+  history: propTypes.shape({
+    push: propTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default ProfileEdit;
