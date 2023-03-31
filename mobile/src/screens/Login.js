@@ -6,7 +6,7 @@ import {
   Text,
   Dimensions,
   Image,
-  Button
+  Button,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { storeData } from '../utils/storage';
