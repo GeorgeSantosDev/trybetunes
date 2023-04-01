@@ -32,7 +32,7 @@ function SearchBar() {
   };
 
   const isDisabled = search === '';
-  console.log(album.length > 0);
+
   return (
     <View>
       <ImageBackground style={ styles.image } source={headerImage}>
