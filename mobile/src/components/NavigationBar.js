@@ -7,6 +7,7 @@ import profileIcon from '../../images/profileIcon.png';
 import searchIcon from '../../images/searchIcon.png';
 
 const width = Dimensions.get('screen').width;
+const height = Dimensions.get('screen').height;
 
 function NavigationBar() {
   const navigation = useNavigation();
@@ -43,11 +44,13 @@ function NavigationBar() {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
     backgroundColor: '#EFE9E1',
     padding: 10,
     width: width,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    top: height - 135,
   },
   icon: {
     width: 20,
