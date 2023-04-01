@@ -14,6 +14,7 @@ import Login from './src/screens/Login';
 import Home from './src/screens/Home';
 import Favorites from './src/screens/Favorites';
 import Profile from './src/screens/Profile';
+import Album from './src/screens/Album';
 import Provider from './src/context/provider';
 
 const Stack = createStackNavigator();
@@ -31,6 +32,7 @@ function App()  {
             <Stack.Screen name="Home" component={ Home } options={{ headerShown: false }} />
             <Stack.Screen name="Favorites" component={Favorites} options={{ headerShown: false }}/>
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+            <Stack.Screen name="Album" component={Album} options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
